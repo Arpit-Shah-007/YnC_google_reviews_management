@@ -40,12 +40,12 @@ def parse_site_list(path: str = "Site List.xlsx") -> list[dict]:
         parts = [addr1]
         if addr2:
             parts.append(addr2)
-        zip_str = str(zipcode).split(".")[0].zfill(5) if zipcode else ""
+        zip_str = str(int(float(str(zipcode)))).zfill(5) if zipcode is not None else ""
         parts.append(f"{city}, {state} {zip_str}".strip())
         full_address = ", ".join(parts)
 
         brand = BRAND_MAP[current_group]
-        store_num_str = str(store_num).split(".")[0] if store_num else "unknown"
+        store_num_str = str(store_num).split(".")[0] if store_num is not None else "unknown"
 
         stores.append({
             "brand": brand,

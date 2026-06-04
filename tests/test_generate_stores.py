@@ -14,7 +14,7 @@ def test_build_google_maps_url_no_spaces():
     assert " " not in url
 
 
-def test_parse_site_list_returns_correct_counts(tmp_path):
+def test_parse_site_list_returns_correct_counts():
     # This test runs against the real Site List.xlsx in the project root
     stores = parse_site_list("Site List.xlsx")
     taco = [s for s in stores if s["group"] == "Taco Bell"]
