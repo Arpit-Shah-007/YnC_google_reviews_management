@@ -1,4 +1,5 @@
 from analyze import load_latest_reviews, group_reviews_by_store, calculate_avg_rating
+from analyze import build_gemini_prompt, parse_gemini_response
 
 
 def test_load_latest_reviews_returns_list(tmp_path, monkeypatch):
@@ -55,3 +56,28 @@ def test_calculate_avg_rating_correct():
 
 def test_calculate_avg_rating_empty_returns_none():
     assert calculate_avg_rating([]) is None
+
+
+def test_build_gemini_prompt_contains_store_name():
+    reviews = [{"stars": 4, "text": "Great food"}, {"stars": 2, "text": "Slow service"}]
+    prompt = build_gemini_prompt("Taco Bell #041966", "3 Path Plaza, Jersey City, NJ 07036", reviews)
+    assert "Taco Bell #041966" in prompt
+    assert "Jersey City" in prompt
+    assert "Great food" in prompt
+    assert "Slow service" in prompt
+
+
+def test_parse_gemini_response_extracts_summary_and_actions():
+    raw = "SUMMARY: Food quality is consistently praised but drive-through wait times are too long.\nACTIONS: 1. Add a second order-taker during peak hours. 2. Review drive-through staffing schedule. 3. Set a target of under 4 minutes per car."
+    result = parse_gemini_response(raw)
+    assert "Food quality" in result["summary"]
+    assert len(result["actions"]) == 3
+    assert "Add a second" in result["actions"][0]
+
+
+def test_parse_gemini_response_handles_unexpected_format():
+    raw = "Some unexpected response without the expected format."
+    result = parse_gemini_response(raw)
+    assert "summary" in result
+    assert "actions" in result
+    assert isinstance(result["actions"], list)
