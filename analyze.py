@@ -24,7 +24,7 @@ def _get_model():
         if not key:
             raise SystemExit("Missing GEMINI_API_KEY in .env")
         genai.configure(api_key=key)
-        _gemini_model = genai.GenerativeModel("gemini-1.5-flash")
+        _gemini_model = genai.GenerativeModel("gemini-2.5-flash")
     return _gemini_model
 
 
@@ -44,13 +44,22 @@ def _extract_query(url: str) -> str:
 
 
 def group_reviews_by_store(reviews: list[dict], stores: list[dict]) -> list[dict]:
+    # Primary key: full-address query extracted from the store's google_maps_url
     store_by_query = {_extract_query(s["google_maps_url"]): s for s in stores}
 
     grouped: dict[str, dict] = {s["google_maps_url"]: {"store": s, "reviews": []} for s in stores}
 
     for review in reviews:
-        query = _extract_query(review.get("url", ""))
-        store = store_by_query.get(query)
+        # Prefer searchString (what Apify was asked to search) over the returned URL
+        # because Apify collapses the URL query to just the brand name.
+        search_str = review.get("searchString", "").lower().strip()
+        store = store_by_query.get(search_str) if search_str else None
+
+        # Fall back to URL-query matching for any reviews that lack searchString
+        if store is None:
+            query = _extract_query(review.get("url", ""))
+            store = store_by_query.get(query)
+
         if store:
             grouped[store["google_maps_url"]]["reviews"].append(review)
 
