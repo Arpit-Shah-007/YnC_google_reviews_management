@@ -51,7 +51,10 @@ def start_run(store_urls: list[str], start_date: str) -> str:
         timeout=30,
     )
     resp.raise_for_status()
-    run_id = resp.json()["data"]["id"]
+    body = resp.json()
+    if "data" not in body or "id" not in body.get("data", {}):
+        raise SystemExit(f"Unexpected Apify response: {body}")
+    run_id = body["data"]["id"]
     print(f"Apify run started: {run_id}")
     return run_id
 
