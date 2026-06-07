@@ -2,6 +2,7 @@ import glob
 import json
 import os
 import re
+import time
 from datetime import date as date_type
 from urllib.parse import parse_qs, urlparse
 
@@ -9,30 +10,67 @@ import openpyxl
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
-import google.generativeai as genai
+from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
 
-_gemini_model = None  # lazy init — avoids crashing tests that don't call analyze_store
+# Fallback order: best quality first, lighter models as backup
+GROQ_MODELS = [
+    "llama-3.3-70b-versatile",
+    "llama-3.1-8b-instant",
+    "gemma2-9b-it",
+]
+
+_groq_client = None
 
 
-def _get_model():
-    global _gemini_model
-    if _gemini_model is None:
-        key = os.environ.get("GEMINI_API_KEY")
+def _get_client() -> Groq:
+    global _groq_client
+    if _groq_client is None:
+        key = os.environ.get("GROQ_API_KEY")
         if not key:
-            raise SystemExit("Missing GEMINI_API_KEY in .env")
-        genai.configure(api_key=key)
-        _gemini_model = genai.GenerativeModel("gemini-2.5-flash")
-    return _gemini_model
+            raise SystemExit("Missing GROQ_API_KEY in .env")
+        _groq_client = Groq(api_key=key)
+    return _groq_client
+
+
+def _call_groq(prompt: str) -> str:
+    client = _get_client()
+    last_error = None
+    for model in GROQ_MODELS:
+        for attempt in range(3):
+            try:
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[{"role": "user", "content": prompt}],
+                    max_tokens=600,
+                    temperature=0.3,
+                )
+                text = response.choices[0].message.content
+                if model != GROQ_MODELS[0]:
+                    print(f"    (used fallback model: {model})")
+                return text
+            except Exception as e:
+                msg = str(e)
+                last_error = e
+                if "rate_limit" in msg.lower() or "429" in msg:
+                    delay_match = re.search(r"try again in ([\d.]+)s", msg)
+                    delay = float(delay_match.group(1)) + 2 if delay_match else 20
+                    print(f"    Rate limited on {model} — waiting {delay:.0f}s (attempt {attempt + 1}/3)...")
+                    time.sleep(delay)
+                else:
+                    # Non-rate-limit error (e.g. decommissioned) — skip to next model immediately
+                    print(f"    {model} unavailable: skipping to next model...")
+                    break
+    raise last_error
 
 
 def load_latest_reviews(data_dir: str = "data") -> list[dict]:
-    files = sorted(glob.glob(os.path.join(data_dir, "reviews_*.json")))
+    files = glob.glob(os.path.join(data_dir, "reviews_*.json"))
     if not files:
         raise SystemExit(f"No review files found in {data_dir}/. Run scrape.py first.")
-    latest = files[-1]
+    latest = max(files, key=os.path.getmtime)
     print(f"Loading reviews from {latest}")
     with open(latest) as f:
         return json.load(f)
@@ -43,19 +81,39 @@ def _extract_query(url: str) -> str:
     return qs.get("query", [""])[0].lower().strip()
 
 
+def _addr_key(address: str) -> tuple[str, str] | None:
+    """Extract (street_number, zip_code) as a unique store identifier."""
+    number = re.match(r"^(\d+)", address.strip())
+    zip_code = re.search(r"\b(\d{5})\b", address)
+    if number and zip_code:
+        return (number.group(1), zip_code.group(1))
+    return None
+
+
 def group_reviews_by_store(reviews: list[dict], stores: list[dict]) -> list[dict]:
-    # Primary key: full-address query extracted from the store's google_maps_url
     store_by_query = {_extract_query(s["google_maps_url"]): s for s in stores}
+    # Address key: (street_number, zip) — most reliable since it comes from Google Maps data
+    store_by_addr_key: dict[tuple, dict] = {}
+    for s in stores:
+        key = _addr_key(s["address"])
+        if key:
+            store_by_addr_key[key] = s
 
     grouped: dict[str, dict] = {s["google_maps_url"]: {"store": s, "reviews": []} for s in stores}
 
     for review in reviews:
-        # Prefer searchString (what Apify was asked to search) over the returned URL
-        # because Apify collapses the URL query to just the brand name.
-        search_str = review.get("searchString", "").lower().strip()
-        store = store_by_query.get(search_str) if search_str else None
+        # Priority 1: match by review's address field (Google Maps location data — most accurate)
+        store = None
+        rev_key = _addr_key(review.get("address", ""))
+        if rev_key:
+            store = store_by_addr_key.get(rev_key)
 
-        # Fall back to URL-query matching for any reviews that lack searchString
+        # Priority 2: searchString match
+        if store is None:
+            search_str = review.get("searchString", "").lower().strip()
+            store = store_by_query.get(search_str) if search_str else None
+
+        # Priority 3: URL query match
         if store is None:
             query = _extract_query(review.get("url", ""))
             store = store_by_query.get(query)
@@ -91,31 +149,44 @@ REVIEWS:
 {reviews_block}
 
 Provide a concise analysis for the store manager in this exact format:
-SUMMARY: [2-3 sentences describing the main themes, recurring complaints, and any positives]
-ACTIONS: 1. [specific action] 2. [specific action] 3. [specific action]
 
-Be specific and actionable. Address the store manager directly."""
+SUMMARY:
+• [1-2 sentences describing a specific recurring theme, referencing what customers actually said]
+• [1-2 sentences describing a specific recurring theme, referencing what customers actually said]
+• [1-2 sentences describing a specific recurring theme, referencing what customers actually said]
+
+IMPROVEMENTS:
+• [2-5 word improvement area]
+• [2-5 word improvement area]
+• [2-5 word improvement area]
+
+For SUMMARY: be specific — mention actual patterns (e.g. wait times, specific menu items, staff behavior). Reference the volume of complaints where relevant.
+For IMPROVEMENTS: 2-5 words only, no sentences."""
 
 
 def parse_gemini_response(raw: str) -> dict:
-    summary = ""
-    actions = []
+    summary_bullets: list[str] = []
+    improvement_bullets: list[str] = []
+    section = None
 
     for line in raw.strip().splitlines():
         line = line.strip()
-        if line.startswith("SUMMARY:"):
-            summary = line[len("SUMMARY:"):].strip()
-        elif line.startswith("ACTIONS:"):
-            actions_str = line[len("ACTIONS:"):].strip()
-            actions = re.findall(r"\d+\.\s(.+?)(?=\s\d+\.|$)", actions_str)
-            actions = [a.strip() for a in actions if a.strip()]
+        if not line:
+            continue
+        if line.upper().startswith("SUMMARY"):
+            section = "summary"
+        elif line.upper().startswith("IMPROVEMENTS") or line.upper().startswith("IMPROVEMENT"):
+            section = "improvements"
+        elif line.startswith("•") or line.startswith("-"):
+            text = line.lstrip("•-").strip()
+            if text:
+                if section == "summary":
+                    summary_bullets.append(text)
+                elif section == "improvements":
+                    improvement_bullets.append(text)
 
-    if not summary:
-        summary = raw.strip()[:500]
-    if not actions:
-        actions = ["Review customer feedback and address recurring issues."]
-
-    return {"summary": summary, "actions": actions}
+    summary = "\n".join(f"• {b}" for b in summary_bullets) if summary_bullets else raw.strip()[:500]
+    return {"summary": summary, "actions": improvement_bullets}
 
 
 def analyze_store(store_name: str, address: str, reviews: list[dict]) -> dict:
@@ -131,10 +202,10 @@ def analyze_store(store_name: str, address: str, reviews: list[dict]) -> dict:
     prompt = build_gemini_prompt(store_name, address, reviews)
 
     try:
-        response = _get_model().generate_content(prompt)
-        parsed = parse_gemini_response(response.text)
+        raw = _call_groq(prompt)
+        parsed = parse_gemini_response(raw)
     except Exception as e:
-        print(f"  WARNING: Gemini call failed for {store_name}: {e}")
+        print(f"  WARNING: All models failed for {store_name}: {e}")
         parsed = {"summary": "Analysis unavailable.", "actions": []}
 
     return {
@@ -171,8 +242,21 @@ COLUMN_WIDTHS = {
     "Reviews Analyzed": 18,
     "Period": 16,
     "AI Summary & Action Items": 80,
+    "Customer Reviews": 70,
 }
 HEADERS = list(COLUMN_WIDTHS.keys())
+
+
+def _format_reviews(reviews: list[dict]) -> str:
+    lines = []
+    for i, r in enumerate(reviews, 1):
+        stars = r.get("stars", "?")
+        text = (r.get("text") or "").strip()
+        if text:
+            if len(text) > 300:
+                text = text[:297] + "..."
+            lines.append(f"{i}. [{stars}★] {text}")
+    return "\n".join(lines) if lines else "No review text available."
 
 
 def _rating_fill(rating: float | None) -> PatternFill | None:
@@ -204,18 +288,18 @@ def _write_sheet(ws, group_stores: list[dict], brand: str, period_label: str):
         store = entry["store"]
         analysis = entry["analysis"]
 
-        actions_text = ""
+        improvements_text = ""
         if analysis["actions"]:
-            actions_text = " ".join(
-                f"{i}. {a}" for i, a in enumerate(analysis["actions"], 1)
-            )
+            improvements_text = "IMPROVEMENTS:\n" + "\n".join(f"• {a}" for a in analysis["actions"])
 
-        summary_full = analysis["summary"]
-        if actions_text:
-            summary_full = f"{summary_full}\n\n{actions_text}"
+        summary_full = "SUMMARY:\n" + analysis["summary"]
+        if improvements_text:
+            summary_full = f"{summary_full}\n\n{improvements_text}"
 
         rating = analysis["avg_rating"]
         rating_display = f"{rating:.1f} ⭐" if rating is not None else "—"
+
+        reviews_text = _format_reviews(entry.get("reviews", []))
 
         row_values = [
             store["store_number"],
@@ -225,6 +309,7 @@ def _write_sheet(ws, group_stores: list[dict], brand: str, period_label: str):
             analysis["review_count"] or "—",
             period_label,
             summary_full,
+            reviews_text,
         ]
 
         # Alternating row background
@@ -233,7 +318,7 @@ def _write_sheet(ws, group_stores: list[dict], brand: str, period_label: str):
         for col_idx, value in enumerate(row_values, 1):
             cell = ws.cell(row=row_idx, column=col_idx, value=value)
             cell.border = THIN_BORDER
-            cell.alignment = Alignment(vertical="top", wrap_text=(col_idx == len(HEADERS)))
+            cell.alignment = Alignment(vertical="top", wrap_text=(col_idx >= len(HEADERS) - 1))
 
             if row_fill:
                 cell.fill = row_fill
@@ -245,7 +330,8 @@ def _write_sheet(ws, group_stores: list[dict], brand: str, period_label: str):
                     cell.fill = fill
                 cell.alignment = Alignment(horizontal="center", vertical="top")
 
-        ws.row_dimensions[row_idx].height = max(60, 15 * (summary_full.count("\n") + 3))
+        combined_lines = summary_full.count("\n") + reviews_text.count("\n") + 6
+        ws.row_dimensions[row_idx].height = max(80, 15 * combined_lines)
 
     # Set column widths
     for col_idx, header in enumerate(HEADERS, 1):
@@ -260,7 +346,7 @@ def write_excel(grouped: list[dict], start_date: str, out_dir: str = "output") -
     month_label = date_type.fromisoformat(start_date).strftime("%b%Y")
     today_label = date_type.today().strftime("%b %d, %Y")
     period_label = f"{date_type.fromisoformat(start_date).strftime('%b %Y')} – {date_type.today().strftime('%b %d, %Y')}"
-    filename = f"YANDC_Review_Analysis_{month_label}.xlsx"
+    filename = f"Y&C_Google_Review_Analysis_{month_label}.xlsx"
     out_path = os.path.join(out_dir, filename)
 
     wb = openpyxl.Workbook()
@@ -298,14 +384,16 @@ def main():
     reviews = load_latest_reviews()
     grouped_raw = group_reviews_by_store(reviews, stores)
 
-    print(f"Analyzing {len(grouped_raw)} stores with Gemini...")
+    print(f"Analyzing {len(grouped_raw)} stores with Groq ({GROQ_MODELS[0]})...")
     grouped = []
     for entry in grouped_raw:
         store = entry["store"]
         store_reviews = entry["reviews"]
         print(f"  {store['name']} ({len(store_reviews)} reviews)")
         analysis = analyze_store(store["name"], store["address"], store_reviews)
-        grouped.append({"store": store, "analysis": analysis})
+        grouped.append({"store": store, "analysis": analysis, "reviews": store_reviews})
+        if store_reviews:
+            time.sleep(2)  # stay under Groq free tier RPM limit
 
     out_path = write_excel(grouped, args.start)
     print(f"\nDone. Report: {out_path}")

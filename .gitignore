@@ -1,6 +1,8 @@
 .env
 data/
 output/
+.claude/
+stores.json
 __pycache__/
 *.pyc
 .superpowers/
