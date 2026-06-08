@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-const SECRET = 'yandc2014!';
+const SECRET = process.env.NEXT_PUBLIC_DASHBOARD_SECRET ?? '';
 
 interface Props {
   ctx: 'generate' | 'add-store' | 'add-brand';
