@@ -4,6 +4,15 @@ A full-stack dashboard for managing and analyzing Google Maps reviews across all
 
 ---
 
+## Live
+
+| Service | URL |
+|---------|-----|
+| Dashboard | https://yandc-review-hub.onrender.com |
+| API | https://yandc-review-hub-api.onrender.com |
+
+---
+
 ## Tech Stack
 
 | Layer | Technology |
