@@ -1,8 +1,8 @@
 .env
+.env.local
 data/
 output/
 .claude/
-stores.json
 __pycache__/
 *.pyc
 .superpowers/
@@ -20,3 +20,5 @@ dist/
 *.swp
 *.swo
 .DS_Store
+frontend/.next/
+frontend/node_modules/

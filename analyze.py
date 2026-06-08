@@ -216,10 +216,6 @@ def analyze_store(store_name: str, address: str, reviews: list[dict]) -> dict:
     }
 
 
-BRAND_STYLES = {
-    "Taco Bell": {"bg": "702082", "fg": "F5D619"},
-    "Wendy's": {"bg": "CC2222", "fg": "FFFFFF"},
-}
 
 RATING_FILLS = {
     "red":    PatternFill("solid", fgColor="FFCCCC"),
@@ -269,10 +265,9 @@ def _rating_fill(rating: float | None) -> PatternFill | None:
     return RATING_FILLS["green"]
 
 
-def _write_sheet(ws, group_stores: list[dict], brand: str, period_label: str):
-    style = BRAND_STYLES.get(brand, {"bg": "333333", "fg": "FFFFFF"})
-    header_fill = PatternFill("solid", fgColor=style["bg"])
-    header_font = Font(bold=True, color=style["fg"], size=11)
+def _write_sheet(ws, group_stores: list[dict], brand_color: str, period_label: str):
+    header_fill = PatternFill("solid", fgColor=brand_color)
+    header_font = Font(bold=True, color="FFFFFF", size=11)
 
     # Write header row
     for col_idx, header in enumerate(HEADERS, 1):
@@ -341,30 +336,42 @@ def _write_sheet(ws, group_stores: list[dict], brand: str, period_label: str):
     ws.freeze_panes = "A2"
 
 
+def _load_brand_colors(brands_path: str = "brands.json") -> dict[str, str]:
+    try:
+        with open(brands_path) as f:
+            return {b["name"]: b["color"].lstrip("#") for b in json.load(f)}
+    except Exception:
+        return {}
+
+
 def write_excel(grouped: list[dict], start_date: str, out_dir: str = "output") -> str:
     os.makedirs(out_dir, exist_ok=True)
-    month_label = date_type.fromisoformat(start_date).strftime("%b%Y")
-    today_label = date_type.today().strftime("%b %d, %Y")
     period_label = f"{date_type.fromisoformat(start_date).strftime('%b %Y')} – {date_type.today().strftime('%b %d, %Y')}"
-    filename = f"Y&C_Google_Review_Analysis_{month_label}.xlsx"
+    run_label = date_type.today().strftime("%m_%Y")
+    filename = f"Y&C_Google_Review_Analysis_{run_label}.xlsx"
     out_path = os.path.join(out_dir, filename)
 
-    wb = openpyxl.Workbook()
-    wb.remove(wb.active)  # remove default sheet
+    brand_colors = _load_brand_colors()
 
-    tab_groups = [
-        ("Taco Bell", "Taco Bell"),
-        ("Wendy's North", "Wendy's"),
-        ("Wendy's South", "Wendy's"),
-    ]
+    # Build tab list dynamically from groups present in data
+    seen: set[str] = set()
+    tab_groups: list[tuple[str, str]] = []
+    for entry in grouped:
+        group = entry["store"]["group"]
+        brand = entry["store"].get("brand", group)
+        if group not in seen:
+            seen.add(group)
+            tab_groups.append((group, brand))
+
+    wb = openpyxl.Workbook()
+    wb.remove(wb.active)
 
     for tab_name, brand in tab_groups:
         ws = wb.create_sheet(title=tab_name)
-        ws.sheet_properties.tabColor = (
-            "702082" if brand == "Taco Bell" else "CC2222"
-        )
+        tab_color = brand_colors.get(tab_name) or brand_colors.get(brand) or "333333"
+        ws.sheet_properties.tabColor = tab_color
         group_stores = [e for e in grouped if e["store"]["group"] == tab_name]
-        _write_sheet(ws, group_stores, brand, period_label)
+        _write_sheet(ws, group_stores, tab_color, period_label)
 
     wb.save(out_path)
     print(f"Excel report saved to {out_path}")
@@ -376,10 +383,19 @@ def main():
 
     parser = argparse.ArgumentParser(description="Analyze reviews and write Excel report")
     parser.add_argument("--start", required=True, help="Start date YYYY-MM-DD matching your scrape")
+    parser.add_argument("--stores", help="Comma-separated group::store_number keys to restrict analysis")
     args = parser.parse_args()
 
     with open("stores.json") as f:
         stores = json.load(f)
+
+    if args.stores:
+        store_keys = set()
+        for item in args.stores.split(","):
+            parts = item.split("::", 1)
+            if len(parts) == 2:
+                store_keys.add((parts[0], parts[1]))
+        stores = [s for s in stores if (s["group"], s["store_number"]) in store_keys]
 
     reviews = load_latest_reviews()
     grouped_raw = group_reviews_by_store(reviews, stores)

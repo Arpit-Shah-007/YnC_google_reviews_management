@@ -1,0 +1,418 @@
+[
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "041966",
+    "name": "Taco Bell #041966",
+    "address": "3 Path Plaza, Jersey City, NJ 07036",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+3+Path+Plaza%2C+Jersey+City%2C+NJ+07036"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "030685",
+    "name": "Taco Bell #030685",
+    "address": "200 Ryders Lane, Milltown, NJ 08850",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+200+Ryders+Lane%2C+Milltown%2C+NJ+08850"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "031281",
+    "name": "Taco Bell #031281",
+    "address": "572 Route 18, East Brunswick, NJ 08816",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+572+Route+18%2C+East+Brunswick%2C+NJ+08816"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "031508",
+    "name": "Taco Bell #031508",
+    "address": "540 Main Street, Orange, NJ 07050",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+540+Main+Street%2C+Orange%2C+NJ+07050"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "032387",
+    "name": "Taco Bell #032387",
+    "address": "956 US 22, Somerville, NJ 08876",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+956+US+22%2C+Somerville%2C+NJ+08876"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "032662",
+    "name": "Taco Bell #032662",
+    "address": "1111 Springfield Avenue, Irvington, NJ 07111",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+1111+Springfield+Avenue%2C+Irvington%2C+NJ+07111"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "034804",
+    "name": "Taco Bell #034804",
+    "address": "21-33 E 53rd Street, Bayonne, NJ 07002",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+21-33+E+53rd+Street%2C+Bayonne%2C+NJ+07002"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "034806",
+    "name": "Taco Bell #034806",
+    "address": "4041 US Highway 1 South, Monmouth Junction, NJ 08852",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+4041+US+Highway+1+South%2C+Monmouth+Junction%2C+NJ+08852"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "038857",
+    "name": "Taco Bell #038857",
+    "address": "75 Montgomery Street, Jersey City, NJ 07302",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+75+Montgomery+Street%2C+Jersey+City%2C+NJ+07302"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "040167",
+    "name": "Taco Bell #040167",
+    "address": "412-416 Central Avenue, East Orange, NJ 07018",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+412-416+Central+Avenue%2C+East+Orange%2C+NJ+07018"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "040482",
+    "name": "Taco Bell #040482",
+    "address": "2720 Rt 130, North Brunswick, NJ 08902",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+2720+Rt+130%2C+North+Brunswick%2C+NJ+08902"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "040306",
+    "name": "Taco Bell #040306",
+    "address": "100 North Main Street, Manville, NJ 08835",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+100+North+Main+Street%2C+Manville%2C+NJ+08835"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "040323",
+    "name": "Taco Bell #040323",
+    "address": "231 12th Street, Jersey City, NJ 07310",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+231+12th+Street%2C+Jersey+City%2C+NJ+07310"
+  },
+  {
+    "brand": "Taco Bell",
+    "group": "Taco Bell",
+    "store_number": "040335",
+    "name": "Taco Bell #040335",
+    "address": "1243 Broad Street, Bloomfield, NJ 07003",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Taco+Bell+1243+Broad+Street%2C+Bloomfield%2C+NJ+07003"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "13392",
+    "name": "Wendy's #13392",
+    "address": "449 Main Avenue, Passaic, NJ 07055",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+449+Main+Avenue%2C+Passaic%2C+NJ+07055"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "13589",
+    "name": "Wendy's #13589",
+    "address": "39 Walmart Plaza, Clinton, NJ 08809",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+39+Walmart+Plaza%2C+Clinton%2C+NJ+08809"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "13406",
+    "name": "Wendy's #13406",
+    "address": "245 12th Street, Jersey City, NJ 07302",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+245+12th+Street%2C+Jersey+City%2C+NJ+07302"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "13989",
+    "name": "Wendy's #13989",
+    "address": "1500 West Ave, Phillipsburg, NJ 08865",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+1500+West+Ave%2C+Phillipsburg%2C+NJ+08865"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "13569",
+    "name": "Wendy's #13569",
+    "address": "209 Route 46, Rockaway, NJ 07866",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+209+Route+46%2C+Rockaway%2C+NJ+07866"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "13668",
+    "name": "Wendy's #13668",
+    "address": "1243 Broad Street, Bloomfield, NJ 07003",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+1243+Broad+Street%2C+Bloomfield%2C+NJ+07003"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "14806",
+    "name": "Wendy's #14806",
+    "address": "1057 Valley Road, Stirling, NJ 07980",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+1057+Valley+Road%2C+Stirling%2C+NJ+07980"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "4249",
+    "name": "Wendy's #4249",
+    "address": "753 Main Street, Poughkeepsie, NY 12601",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+753+Main+Street%2C+Poughkeepsie%2C+NY+12601"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "9549",
+    "name": "Wendy's #9549",
+    "address": "2596 South Road, Poughkeepsie, NY 12601",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+2596+South+Road%2C+Poughkeepsie%2C+NY+12601"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "14544",
+    "name": "Wendy's #14544",
+    "address": "75 Maple Avenue, Catskill, NY 12414",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+75+Maple+Avenue%2C+Catskill%2C+NY+12414"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's North",
+    "store_number": "14583",
+    "name": "Wendy's #14583",
+    "address": "416 Fairview Avenue, Hudson, NY 12534",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+416+Fairview+Avenue%2C+Hudson%2C+NY+12534"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "5327",
+    "name": "Wendy's #5327",
+    "address": "101 Jack Martin Blvd, Brick, NJ 08724",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+101+Jack+Martin+Blvd%2C+Brick%2C+NJ+08724"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "7998",
+    "name": "Wendy's #7998",
+    "address": "555 Route 70 East, Brick, NJ 08723",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+555+Route+70+East%2C+Brick%2C+NJ+08723"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "8186",
+    "name": "Wendy's #8186",
+    "address": "3150 Route 88, Point Pleasant, NJ 08742",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+3150+Route+88%2C+Point+Pleasant%2C+NJ+08742"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "9530",
+    "name": "Wendy's #9530",
+    "address": "450 Lacey Rd, Whiting, NJ 08759",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+450+Lacey+Rd%2C+Whiting%2C+NJ+08759"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "10803",
+    "name": "Wendy's #10803",
+    "address": "232 Route 70, Toms River, NJ 08753",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+232+Route+70%2C+Toms+River%2C+NJ+08753"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "11389",
+    "name": "Wendy's #11389",
+    "address": "4510 U.S. 9, Howell, NJ 07731",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+4510+U.S.+9%2C+Howell%2C+NJ+07731"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "13248",
+    "name": "Wendy's #13248",
+    "address": "151 Route #35 North Bldg D, Eatontown, NJ 07724",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+151+Route+%2335+North+Bldg+D%2C+Eatontown%2C+NJ+07724"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "455",
+    "name": "Wendy's #455",
+    "address": "600 South Broad Street, Lansdale, PA 19446",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+600+South+Broad+Street%2C+Lansdale%2C+PA+19446"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "527",
+    "name": "Wendy's #527",
+    "address": "1710 Limekiln Pike, Dresher, PA 19025",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+1710+Limekiln+Pike%2C+Dresher%2C+PA+19025"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "1875",
+    "name": "Wendy's #1875",
+    "address": "1758 Allentown Road, Lansdale, PA 19446",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+1758+Allentown+Road%2C+Lansdale%2C+PA+19446"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "1879",
+    "name": "Wendy's #1879",
+    "address": "201 Second Avenue, Collegeville, PA 19426",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+201+Second+Avenue%2C+Collegeville%2C+PA+19426"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "2084",
+    "name": "Wendy's #2084",
+    "address": "70 Buckwalter Road, Suite 1050, Royersford, PA 19468",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+70+Buckwalter+Road%2C+Suite+1050%2C+Royersford%2C+PA+19468"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "2230",
+    "name": "Wendy's #2230",
+    "address": "1075 Township Line Road, Phoenixville, PA 19460",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+1075+Township+Line+Road%2C+Phoenixville%2C+PA+19460"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "2444",
+    "name": "Wendy's #2444",
+    "address": "400 N. Main Street, Doylestown, PA 18901",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+400+N.+Main+Street%2C+Doylestown%2C+PA+18901"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "2644",
+    "name": "Wendy's #2644",
+    "address": "1013 Ridge Pike, Conshohocken, PA 19428",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+1013+Ridge+Pike%2C+Conshohocken%2C+PA+19428"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "2686",
+    "name": "Wendy's #2686",
+    "address": "752 Route 113, Souderton, PA 18964",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+752+Route+113%2C+Souderton%2C+PA+18964"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "8612",
+    "name": "Wendy's #8612",
+    "address": "227 Plaza Blvd., Morrisville, PA 19067",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+227+Plaza+Blvd.%2C+Morrisville%2C+PA+19067"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "8616",
+    "name": "Wendy's #8616",
+    "address": "590 South Trooper Road, Norristown, PA 19403",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+590+South+Trooper+Road%2C+Norristown%2C+PA+19403"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "11187",
+    "name": "Wendy's #11187",
+    "address": "2815 Dekalb Pike, Norristown, PA 19401",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+2815+Dekalb+Pike%2C+Norristown%2C+PA+19401"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "11188",
+    "name": "Wendy's #11188",
+    "address": "1540 Egypt Road, Phoenixville, PA 19460",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+1540+Egypt+Road%2C+Phoenixville%2C+PA+19460"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "11228",
+    "name": "Wendy's #11228",
+    "address": "186 Eagleview Blvd., Exton, PA 19341",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+186+Eagleview+Blvd.%2C+Exton%2C+PA+19341"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "11807",
+    "name": "Wendy's #11807",
+    "address": "1260 Bethlehem Pike, Hatfield, PA 19440",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+1260+Bethlehem+Pike%2C+Hatfield%2C+PA+19440"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "11858",
+    "name": "Wendy's #11858",
+    "address": "59 N. West End Blvd., Quakertown, PA 18951",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+59+N.+West+End+Blvd.%2C+Quakertown%2C+PA+18951"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "11971",
+    "name": "Wendy's #11971",
+    "address": "1010 Bethlehem Pike, Montgomeryville, PA 18936",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+1010+Bethlehem+Pike%2C+Montgomeryville%2C+PA+18936"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "12335",
+    "name": "Wendy's #12335",
+    "address": "3020 Veterans Ave., Bristol, PA 19007",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+3020+Veterans+Ave.%2C+Bristol%2C+PA+19007"
+  },
+  {
+    "brand": "Wendy's",
+    "group": "Wendy's South",
+    "store_number": "08617",
+    "name": "Wendy's #08617",
+    "address": "306 South Henderson Rd, King of Prussia, PA 19406",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Wendy%27s+306+South+Henderson+Rd%2C+King+of+Prussia%2C+PA+19406"
+  },
+  {
+    "brand": "Starbucks",
+    "group": "Starbucks",
+    "store_number": "12345",
+    "name": "Starbucks #12345",
+    "address": "163 Washington Valley Rd, Suite 104, Warren NJ 07059",
+    "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Starbucks+%2312345+163+Washington+Valley+Rd%2C+Suite+104%2C+Warren+NJ+07059"
+  }
+]

@@ -22,10 +22,12 @@ def load_stores(path: str = "stores.json") -> list[dict]:
         return json.load(f)
 
 
-def select_stores(stores: list[dict], test_mode: bool) -> list[dict]:
+def select_stores(stores: list[dict], test_mode: bool, store_keys: set[tuple] | None = None) -> list[dict]:
+    if store_keys is not None:
+        return [s for s in stores if (s["group"], s["store_number"]) in store_keys]
     if not test_mode:
         return stores
-    seen = set()
+    seen: set[str] = set()
     selected = []
     for store in stores:
         if store["group"] not in seen:
@@ -94,10 +96,19 @@ def main():
     parser.add_argument("--start", required=True, help="Start date YYYY-MM-DD (e.g. 2025-03-01)")
     parser.add_argument("--end", help="End date YYYY-MM-DD (informational label only)")
     parser.add_argument("--test", action="store_true", help="Run 1 store per brand (3 stores total)")
+    parser.add_argument("--stores", help="Comma-separated group::store_number keys to restrict scraping")
     args = parser.parse_args()
 
+    store_keys = None
+    if args.stores:
+        store_keys = set()
+        for item in args.stores.split(","):
+            parts = item.split("::", 1)
+            if len(parts) == 2:
+                store_keys.add((parts[0], parts[1]))
+
     stores = load_stores()
-    selected = select_stores(stores, args.test)
+    selected = select_stores(stores, args.test, store_keys)
     label = " (TEST MODE — 1 store per brand)" if args.test else ""
     print(f"Scraping {len(selected)} stores{label}")
     for s in selected:
