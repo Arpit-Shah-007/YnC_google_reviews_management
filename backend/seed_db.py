@@ -36,8 +36,12 @@ def seed():
         try:
             db.table("brands").insert({"name": brand["name"], "color": brand["color"]}).execute()
             print(f"  + {brand['name']}")
-        except Exception:
-            print(f"  ~ {brand['name']} (already exists, skipped)")
+        except Exception as e:
+            msg = str(e).lower()
+            if "duplicate" in msg or "unique" in msg or "23505" in msg:
+                print(f"  ~ {brand['name']} (already exists, skipped)")
+            else:
+                raise SystemExit(f"  ERROR inserting brand '{brand['name']}': {e}")
 
     # Seed stores
     with open(_HERE / "stores.json") as f:
@@ -56,8 +60,12 @@ def seed():
                 "google_maps_url": store.get("google_maps_url", ""),
             }).execute()
             ok += 1
-        except Exception:
-            skipped += 1
+        except Exception as e:
+            msg = str(e).lower()
+            if "duplicate" in msg or "unique" in msg or "23505" in msg:
+                skipped += 1
+            else:
+                raise SystemExit(f"  ERROR inserting store '{store['name']}': {e}")
 
     print(f"  {ok} inserted, {skipped} skipped (already exist)")
     print("\nDone. Supabase is seeded.")
