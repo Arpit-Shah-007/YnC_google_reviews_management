@@ -22,3 +22,6 @@ dist/
 .DS_Store
 frontend/.next/
 frontend/node_modules/
+frontend/out/
+frontend/tsconfig.tsbuildinfo
+image.png
