@@ -9,10 +9,10 @@ from urllib.parse import quote_plus
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse  # used by download endpoint
 from pydantic import BaseModel
 
-ROOT = Path(__file__).parent.parent  # repo root
+ROOT = Path(__file__).parent  # backend/
 
 app = FastAPI(title="Y&C Review Hub API")
 app.add_middleware(
@@ -80,14 +80,6 @@ def download_report():
         filename=Path(path).name,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
-
-
-@app.get("/api/logo")
-def get_logo():
-    logo = ROOT / "y&c_logo.png"
-    if not logo.exists():
-        raise HTTPException(status_code=404, detail="Logo not found")
-    return FileResponse(logo, media_type="image/png")
 
 
 @app.get("/api/brands")

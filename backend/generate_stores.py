@@ -1,6 +1,10 @@
 import json
 import urllib.parse
+from pathlib import Path
+
 import openpyxl
+
+_HERE = Path(__file__).parent
 
 
 SECTION_HEADERS = {"Taco Bells", "Wendy's North", "Wendy's South"}
@@ -60,8 +64,10 @@ def parse_site_list(path: str = "Site List.xlsx") -> list[dict]:
 
 
 if __name__ == "__main__":
-    stores = parse_site_list()
-    with open("stores.json", "w") as f:
+    site_list = _HERE.parent / "Site List.xlsx"
+    stores = parse_site_list(str(site_list))
+    out_path = _HERE / "stores.json"
+    with open(out_path, "w") as f:
         json.dump(stores, f, indent=2)
     print(f"Generated stores.json with {len(stores)} stores")
     for group in ["Taco Bell", "Wendy's North", "Wendy's South"]:

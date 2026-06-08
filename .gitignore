@@ -2,6 +2,8 @@
 .env.local
 data/
 output/
+backend/data/
+backend/output/
 .claude/
 __pycache__/
 *.pyc

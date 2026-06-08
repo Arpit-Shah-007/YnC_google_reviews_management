@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { type Brand, addStore, apiUrl, fetchBrands, fetchStores, pollStatus, saveBrand, startJob } from '@/lib/api';
+import { type Brand, addStore, fetchBrands, fetchStores, pollStatus, saveBrand, startJob } from '@/lib/api';
 import { type JobStatus, type Store, storeKey } from '@/lib/types';
 import ActionArea from './ActionArea';
 import ManagementPanel from './ManagementPanel';
@@ -162,7 +162,7 @@ export default function Dashboard() {
       <header className="header">
         <div className="header-left">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="header-logo" src={apiUrl('/api/logo')} alt="Y&C Logo" />
+          <img className="header-logo" src="/logo.png" alt="Y&C Logo" />
           <div className="header-divider" />
           <div>
             <div className="header-title">Review Hub</div>
