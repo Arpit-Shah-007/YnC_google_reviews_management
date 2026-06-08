@@ -12,7 +12,8 @@ services:
       - key: GROQ_API_KEY
         sync: false
 
-  - type: static
+  - type: web
+    runtime: static
     name: yandc-review-hub
     rootDir: frontend
     buildCommand: npm ci && npm run build
