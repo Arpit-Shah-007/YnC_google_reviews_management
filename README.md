@@ -10,6 +10,7 @@ A full-stack dashboard for managing and analyzing Google Maps reviews across all
 |-------|-----------|
 | Frontend | Next.js 14 (App Router), TypeScript |
 | Backend API | FastAPI (Python) |
+| Database | Supabase (PostgreSQL) — persistent store/brand data |
 | AI Analysis | Groq — `llama-3.3-70b-versatile` with automatic fallback |
 | Review Scraping | Apify — Google Maps Reviews Scraper |
 | Excel Export | openpyxl |
@@ -22,12 +23,13 @@ A full-stack dashboard for managing and analyzing Google Maps reviews across all
 ```
 repo/
 ├── backend/
-│   ├── main.py            # FastAPI app — serves all /api/* endpoints
+│   ├── main.py            # FastAPI app — all /api/* endpoints
 │   ├── scrape.py          # Pulls reviews from Apify
 │   ├── analyze.py         # Groq AI analysis + Excel export
-│   ├── generate_stores.py # One-time utility: Site List.xlsx → stores.json
-│   ├── brands.json        # Brand groups and their colors
-│   └── stores.json        # All store locations
+│   ├── generate_stores.py # Utility: Site List.xlsx → stores.json
+│   ├── seed_db.py         # One-time: seeds Supabase from local JSON files
+│   ├── brands.json        # Brand reference data (source of truth for seeding)
+│   └── stores.json        # Store reference data (source of truth for seeding)
 ├── frontend/
 │   ├── app/               # Next.js App Router pages
 │   ├── components/        # Dashboard, StoreSelector, ManagementPanel, etc.
@@ -46,21 +48,59 @@ repo/
 - Node.js 18+
 - `APIFY_API_TOKEN` — from [apify.com](https://apify.com)
 - `GROQ_API_KEY` — from [console.groq.com](https://console.groq.com)
+- `SUPABASE_URL` and `SUPABASE_KEY` — from [supabase.com](https://supabase.com)
 
 ---
 
-## Setup
+## Supabase Setup (one-time)
+
+Create two tables in your Supabase project via the SQL Editor:
+
+```sql
+CREATE TABLE brands (
+  id SERIAL PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL,
+  color TEXT NOT NULL
+);
+
+CREATE TABLE stores (
+  id SERIAL PRIMARY KEY,
+  brand TEXT NOT NULL,
+  "group" TEXT NOT NULL,
+  store_number TEXT NOT NULL,
+  name TEXT NOT NULL,
+  address TEXT NOT NULL,
+  google_maps_url TEXT NOT NULL,
+  UNIQUE ("group", store_number)
+);
+```
+
+Then seed with existing data:
+
+```bash
+python backend/seed_db.py
+```
+
+---
+
+## Local Setup
 
 ```bash
 # Backend
 pip install -r requirements.txt
-cp .env.example .env
-# Fill in APIFY_API_TOKEN and GROQ_API_KEY in .env
+
+# Create .env with:
+# APIFY_API_TOKEN=...
+# GROQ_API_KEY=...
+# SUPABASE_URL=...
+# SUPABASE_KEY=...
 
 # Frontend
-cd frontend
-npm install
+cd frontend && npm install
 ```
+
+> Without `SUPABASE_URL` / `SUPABASE_KEY`, the backend falls back to the local
+> `brands.json` and `stores.json` files automatically.
 
 ---
 
@@ -71,8 +111,7 @@ npm install
 uvicorn backend.main:app --reload --port 8000
 
 # Terminal 2 — frontend
-cd frontend
-npm run dev
+cd frontend && npm run dev
 ```
 
 Open `http://localhost:3000`.
@@ -104,19 +143,21 @@ python backend/scrape.py --start 2025-03-01 --stores "Taco Bell::1234,Wendy's No
 python backend/analyze.py --start 2025-03-01 --stores "Taco Bell::1234,Wendy's North::5678"
 ```
 
-### Re-run analysis only (no re-scrape, uses existing JSON)
+### Re-run analysis only (no re-scrape, uses existing JSON in backend/data/)
 
 ```bash
 python backend/analyze.py --start 2025-03-01
 ```
 
-Output lands in `backend/output/Y&C_Google_Review_Analysis_MM_YYYY.xlsx`.
+Output: `backend/output/Y&C_Google_Review_Analysis_MM_YYYY.xlsx`
 
 ### Regenerate stores.json from Site List.xlsx
 
 ```bash
 python backend/generate_stores.py
 ```
+
+Then re-run `seed_db.py` to sync new stores into Supabase.
 
 ---
 
@@ -136,3 +177,5 @@ The free Groq tier handles the full run. On a 51-store batch the 70b model rate-
 |----------|----------------|
 | `APIFY_API_TOKEN` | apify.com → Settings → Integrations |
 | `GROQ_API_KEY` | console.groq.com → API Keys |
+| `SUPABASE_URL` | Supabase dashboard → Settings → API → Project URL |
+| `SUPABASE_KEY` | Supabase dashboard → Settings → API → anon public key |
