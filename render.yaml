@@ -12,11 +12,11 @@ services:
       - key: GROQ_API_KEY
         sync: false
 
-staticSites:
-  - name: yandc-review-hub
+  - type: static
+    name: yandc-review-hub
     rootDir: frontend
     buildCommand: npm ci && npm run build
-    publishDir: out
+    staticPublishPath: out
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: https://yandc-review-hub-api.onrender.com
