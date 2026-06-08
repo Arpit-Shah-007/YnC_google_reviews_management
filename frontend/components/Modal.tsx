@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-const SECRET = 'yandc2026';
+const SECRET = 'yandc2014!';
 
 interface Props {
   ctx: 'generate' | 'add-store' | 'add-brand';
@@ -11,9 +11,9 @@ interface Props {
 }
 
 const CFG = {
-  generate:  { title: 'Generate Report',    sub: 'Enter your secret key to start the analysis.',    btn: 'Confirm & Generate' },
-  'add-store': { title: 'Save Location',    sub: 'Enter your secret key to save this location.',     btn: 'Confirm & Save' },
-  'add-brand': { title: 'Create Brand',     sub: 'Enter your secret key to create this brand group.', btn: 'Confirm & Create' },
+  generate: { title: 'Generate Report', sub: 'Enter your secret key to start the analysis.', btn: 'Confirm & Generate' },
+  'add-store': { title: 'Save Location', sub: 'Enter your secret key to save this location.', btn: 'Confirm & Save' },
+  'add-brand': { title: 'Create Brand', sub: 'Enter your secret key to create this brand group.', btn: 'Confirm & Create' },
 } as const;
 
 export default function Modal({ ctx, onConfirm, onClose }: Props) {
